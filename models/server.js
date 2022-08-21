@@ -1,6 +1,7 @@
 const epxress = require("express");
 const cors = require("cors")
 const morgan = require("morgan")
+const { dbconnection } = require("../database/config")
 class Server {
     array = [];
 
@@ -8,9 +9,19 @@ class Server {
         this.app = epxress();
         this.port = process.env.PORT;
         //middlewares
-        this.middlewares()
+        this.middlewares();
         //Rutas de la aplicacion    
         this.routes();
+
+        //Conectar ala base de datos
+
+        this.connectdatabase();
+
+    }
+
+
+    async connectdatabase(){
+await dbconnection();
 
     }
 
@@ -27,7 +38,7 @@ class Server {
 
     routes() {
 
-        this.app.use("/api/users", require("./routes/user.routes"))
+        this.app.use("/api/users", require("../routes/user.routes"))
     }
     listen() {
         this.app.listen(this.port, (err) => {
@@ -35,7 +46,7 @@ class Server {
             if (err) {
                 console.log(err);
             }
-            console.log("Running in the " + this.port + "😎");
+            console.log("Running in the " + this.port );
         })
     }
 }
