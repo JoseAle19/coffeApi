@@ -16,13 +16,12 @@ class Server {
         //Conectar ala base de datos
 
         this.connectdatabase();
-
+    
     }
 
 
     async connectdatabase(){
-await dbconnection();
-
+    await dbconnection();
     }
 
     middlewares() {
