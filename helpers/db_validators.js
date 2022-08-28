@@ -1,7 +1,7 @@
 const Role = require("../models/rol");
-const user = require("../models/user");
 const User = require("../models/user")
-
+//Este es una prueba de hacer un token de encriptacion
+const jwt = require("jsonwebtoken");
 
 const validatorRol = async (role = "") => {
     const existRol = await Role.findOne({ role });
@@ -20,8 +20,8 @@ const existEmail = async (email = "") => {
     }
 }
 
-const userExistById =  async  (userid) => {
-    const existUser = await User.findById( userid);
+const userExistById = async (userid) => {
+    const existUser = await User.findById(userid);
     if (!existUser) {
         //El status(400) es un bad request
         throw new Error(`El usuario con el id: ${userid} no existe `);

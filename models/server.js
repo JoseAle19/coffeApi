@@ -16,20 +16,19 @@ class Server {
         //Conectar ala base de datos
 
         this.connectdatabase();
-    
     }
 
 
-    async connectdatabase(){
-    await dbconnection();
+    async connectdatabase() {
+        await dbconnection();
     }
-    
+
 
     middlewares() {
 
         this.app.use(cors());
         // this.app.use(morgan())
-        
+
         this.app.use(epxress.static("public"))
 
         this.app.use(epxress.json())
@@ -38,6 +37,7 @@ class Server {
 
     routes() {
 
+        this.app.use("/api/auth", require("../routes/auth.routes"))
         this.app.use("/api/users", require("../routes/user.routes"))
     }
     listen() {
@@ -46,12 +46,11 @@ class Server {
             if (err) {
                 console.log(err);
             }
-            console.log("Running in the " + this.port );
+            console.log("Running in the " + this.port);
         })
     }
+
 }
-
-
 
 
 

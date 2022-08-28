@@ -67,8 +67,11 @@ const userdelete = async (req, res) => {
     const { userid } = req.params;
     const user = await User.findByIdAndUpdate(userid, { estado: false });
 
+
+const userau = req.userAuth;
+
     res.json({
-        msg: `Datos del usuario con el id ${userid}`,
+        msg: `Datos del usuario eliminado con el id ${userid}`,
         user,
     })
 }
