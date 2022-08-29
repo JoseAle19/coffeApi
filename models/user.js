@@ -7,17 +7,23 @@ const userSchema = Schema({
         type: String,
         required: [true, "El nombre es requerido"]
     },
+
+
     email: {
         type: String,
         unique: true,
         required: [true, "El correo es requerido"]
     },
+
+
     password: {
         type: String,
         required: [true, "La contraseña es requerido"]
     },
     image: {
     },
+
+    
     rol: {
         type: String,
         required: true,

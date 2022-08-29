@@ -3,6 +3,8 @@ const { response, request } = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("../helpers/generateJWT");
+const { googleVerify } = require("../helpers/verify_google");
+const user = require("../models/user");
 
 
 
@@ -28,13 +30,9 @@ const login = async (req = request, res = response) => {
         if (!validatepass) {
             return res.status(400).json(
                 { msg: "Correo o contraseña incorrectos, contraseña" })
-
         }
         //generar token 
-        
         const token = await generateToken(user.id);
-
-
         res.status(200).json({
             msg: "Login ok",
             // password,
@@ -46,10 +44,59 @@ const login = async (req = request, res = response) => {
 
     } catch (error) {
         console.log(error);
-        res.status(400).json("Contacte al administrador") 
+        res.status(400).json("Contacte al administrador")
     }
 }
 
+
+const googleSingIn = async (req = request, res = response) => {
+
+    const { id_token } = req.body;
+
+    try {
+
+        const { name, email, img } = await googleVerify(id_token)
+
+
+        let usergoogle = await User.findOne({ email })
+        if (!usergoogle) {
+            const data = {
+                name,
+                email,
+                password: ":p",
+                image: img,
+                rol: "user",
+                google: true
+            }
+            usergoogle = new User(data)
+            await usergoogle.save();
+        }
+
+        if (!usergoogle.estado) {
+           return  res.status(401).json({
+                success: false,
+                msg: "Hable con el administrador, usuario-bloqueado"
+            })
+        }
+
+
+        const token = await generateToken(usergoogle.uid)
+        return res.json({
+            msg: "Todo ok",
+            token,
+            usergoogle
+
+        })
+
+    } catch (err) {
+        console.log("Error -------------------------->  " + err);
+    }
+}
+
+
+
+
 module.exports = {
-    login
+    login,
+    googleSingIn
 }

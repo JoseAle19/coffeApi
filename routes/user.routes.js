@@ -28,7 +28,7 @@ router.post("/postuser", [
 
 router.delete("/deleteuser/:userid", [
     validateJWT,
-    hasARole("admin", "sale", ),
+    hasARole("admin", "sale",),
     // validateROL,
     check(`userid`, `Este no es un id valido`).isMongoId(),
     check(`userid`).custom(userExistById),
