@@ -42,22 +42,23 @@
           res => res.json())
         .then(
           res => {
+            console.log(res.usergoogle);
             localStorage.setItem("email", res.usergoogle.email)
           }
         ).catch(
-          console.warn
+          
+          console.warn()
         )
-        location.reload();
     }
 
     const button = document.getElementById("singup")
 
     button.onclick = () => {
 
-      console.log(google.accounts.id.revoke(localStorage.getItem("email"), done =()=>{
+      google.accounts.id.revoke(localStorage.getItem("email"), done = () => {
         localStorage.clear();
         location.reload();
-      }));
+      });
 
     } 
   </script>
