@@ -13,7 +13,8 @@
   <h1>Google sing in</h1>
 
 
-  <div id="g_id_onload" data-client_id="508163946906-0e5k41p90nokaa43ep25jrp28lg9q2v6.apps.googleusercontent.com"
+  <div id="g_id_onload" 
+  data-client_id="796747610582-6mm9d9p95dn3pjsi29joe5c58n7pr309.apps.googleusercontent.com"
     data-auto_prompt="false" data-callback="handleCredentialResponse">
 
 
@@ -27,6 +28,8 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <button id="singup">Salir de la cuenta</button>
+
+
   <script>
     function handleCredentialResponse(response) {
       body = { id_token: response.credential }
@@ -46,7 +49,6 @@
             localStorage.setItem("email", res.usergoogle.email)
           }
         ).catch(
-          
           console.warn()
         )
     }
