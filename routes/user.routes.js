@@ -6,7 +6,7 @@ const { validatorRol, existEmail, userExistById } = require("../helpers/db_valid
 const { userget, userput, userpost, userdelete } = require("../controller/user.controller");
 const { validationfields } = require("../middleware/user.middleware");
 const { validateJWT } = require("../middleware/validateJWT");
-const { validateROL, hasARole } = require("../middleware/validate_rols");
+const { hasARole } = require("../middleware/validate_rols");
 
 
 router.get("/getuser", userget);
@@ -28,7 +28,7 @@ router.post("/postuser", [
 
 router.delete("/deleteuser/:userid", [
     validateJWT,
-    hasARole("admin", "sale",),
+    hasARole("admin", "Order",),
     // validateROL,
     check(`userid`, `Este no es un id valido`).isMongoId(),
     check(`userid`).custom(userExistById),

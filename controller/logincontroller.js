@@ -34,9 +34,8 @@ const login = async (req = request, res = response) => {
         //generar token 
         const token = await generateToken(user.id);
         res.status(200).json({
-            msg: "Login ok",
-            // password,
-            // email,
+            status: true,
+            msg: "Bienvenido",
             user,
             token
         })
@@ -82,6 +81,7 @@ const googleSingIn = async (req = request, res = response) => {
 
         const token = await generateToken(usergoogle.uid)
         return res.json({
+            status: true,
             msg: "Todo ok",
             token,
             usergoogle

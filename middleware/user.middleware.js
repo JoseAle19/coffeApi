@@ -5,8 +5,8 @@ const { validationResult } = require("express-validator");
 const validationfields = (req, res, next) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
-        console.log("Entra a esta validacio");
         return res.status(400).json({
+            status: false,
             err,
         })
     }
