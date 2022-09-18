@@ -1,6 +1,5 @@
 const epxress = require("express");
 const cors = require("cors");
-const morgan = require("morgan");
 const { dbconnection } = require("../database/config");
 class Server {
   array = [];
@@ -39,6 +38,7 @@ class Server {
     this.app.use("/api/products", require("../routes/product.routes"));
     this.app.use("/api/Orders", require("../routes/Order.routes"));
   }
+  
   listen() {
     this.app.listen(this.port, (err) => {
       if (err) {
