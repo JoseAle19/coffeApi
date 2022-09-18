@@ -13,7 +13,7 @@ const userget = async (req = request, res = response) => {
   ]);
   res.status(200).json({
     status: true,
-    msg: "Listado de ususarios",
+    msg: "Listado de usuarios",
     total,
     users,
   });
