@@ -1,6 +1,6 @@
 const { request, response } = require("express");
-const { Order, Product } = require("../models");
-
+const { Order, Product, User } = require("../models");
+const { sendEmailOrder } = require("../sendemail/sendemail");
 const getOrders = async (req = request, res = response) => {
   const { date } = req.query;
   const countDocuments = await Order.countDocuments();
@@ -8,7 +8,7 @@ const getOrders = async (req = request, res = response) => {
 
   res.status(200).json({
     status: true,
-    "orders":countDocuments,
+    orders: countDocuments,
     msg: "Peedidos  realizadas",
     listOrders: getOrders,
   });
@@ -28,7 +28,13 @@ const OrderProduct = async (req = request, res = response) => {
     client: req.userAuth.id,
   };
   const productOrder = new Order(data);
-  await productOrder.save();
+  // await productOrder.save();
+  const { email, name } = await User.findById(req.userAuth.id);
+
+  console.log(productOrder.id);
+
+  sendEmailOrder(email, name, productOrder.id);
+
   res.status(200).json({
     status: true,
     msg: "Datos de la venta realizada",
