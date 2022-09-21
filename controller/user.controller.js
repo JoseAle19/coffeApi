@@ -31,7 +31,7 @@ const userpost = async (req = request, res = response) => {
   await user.save();
   res.status(201).json({
     status: true,
-    msg: "Ususario creado exitosamente",
+    msg: "Usuario creado",
     user,
   });
 };
