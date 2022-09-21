@@ -35,6 +35,7 @@ if(!user.estado){
 req.userAuth = user
         next() 
     } catch (error) {
+        console.log(error);
         return res.status(400).json({
             msg: "Token no valido"
         })
