@@ -22,6 +22,11 @@ const schemaOrder = Schema({
     type: Schema.Types.ObjectId,
     ref: "Usuario",
   },
+
+  finish: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 schemaOrder.methods.toJSON = function () {

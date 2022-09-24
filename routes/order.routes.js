@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { check } = require("express-validator");
 const { OrderProduct, getOrders } = require("../controller/Ordercontroller");
 const { validateJWT } = require("../middleware/validateJWT");
+const { validationfields } = require("../middleware/user.middleware");
 
 const router = Router();
 
@@ -11,10 +12,10 @@ router.post(
   "/successOrder",
   [
     validateJWT,
-    check("productId", "No a especificado ni un producto").isMongoId(),
-    check("quantity", "La catidad debe ser almenos una pieza").isLength({
+    check("dataProducts", "No a especificado ni un producto").isLength({
       min: 1,
     }),
+    validationfields,
   ],
   OrderProduct
 );

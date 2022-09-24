@@ -37,6 +37,7 @@ class Server {
     this.app.use("/api/categorys", require("../routes/categorys.routes"));
     this.app.use("/api/products", require("../routes/product.routes"));
     this.app.use("/api/Orders", require("../routes/order.routes"));
+    this.app.use("/api/sales", require("../routes/sale.routes"));
   }
   
   listen() {

@@ -1,8 +1,5 @@
-// const Role = require("../models/rol");
-// const User = require("../models/user")
-// const Category = require("../models/category")
-//Este es una prueba de hacer un token de encriptacion
-const { Category, User, Product, Rol } = require("../models");
+
+const { Category, User, Product, Rol, Order } = require("../models");
 const jwt = require("jsonwebtoken");
 
 const validatorRol = async (role = "") => {
@@ -42,6 +39,21 @@ const existProduct = async (id) => {
     throw new Error(`El producto con el id: ${id} no existe `);
   }
 };
+const existOrder = async (id) => {
+  const existOrder = await Order.findById(id);
+  if (!existOrder) {
+    throw new Error(`El pedido con el id: ${id} no existe `);
+  }
+};
+const orderIdfinish = async (id) => {
+  const existOrder = await Order.findById(id);
+console.log(existOrder);
+if (existOrder.finish === true) {
+  throw new Errorw(`Este pedido con el id ${id} ya esta finalizado`);
+}
+
+
+};
 
 module.exports = {
   validatorRol,
@@ -49,4 +61,6 @@ module.exports = {
   userExistById,
   categoryExistById,
   existProduct,
+  existOrder,
+orderIdfinish
 };

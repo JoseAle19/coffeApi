@@ -15,7 +15,7 @@ const validateROL = (req = request, res = response, next) => {
 
     const { rol, name } = req.userAuth;
 
-    if (rol !== "admin") {
+    if (rol !== "administrador") {
         res.status(401).json({
             status: false,
             msg: `${name} no es administrador`
