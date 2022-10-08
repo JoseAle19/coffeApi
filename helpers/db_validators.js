@@ -1,4 +1,3 @@
-
 const { Category, User, Product, Rol, Order } = require("../models");
 const jwt = require("jsonwebtoken");
 
@@ -47,12 +46,20 @@ const existOrder = async (id) => {
 };
 const orderIdfinish = async (id) => {
   const existOrder = await Order.findById(id);
-console.log(existOrder);
-if (existOrder.finish === true) {
-  throw new Errorw(`Este pedido con el id ${id} ya esta finalizado`);
-}
+  if (existOrder.finish === true) {
+    throw new Error(`Este pedido con el id ${id} ya esta finalizado`);
+  }
+};
 
+const validateCollections = (collections, next) => {
+  const collectionsarray = ["users", "products"];
 
+  const collectionsValid = collectionsarray.includes(collections);
+
+  if (!collectionsValid) {
+    throw new Error("La coleccion no existe");
+  }
+  return true;
 };
 
 module.exports = {
@@ -62,5 +69,6 @@ module.exports = {
   categoryExistById,
   existProduct,
   existOrder,
-orderIdfinish
+  orderIdfinish,
+  validateCollections,
 };

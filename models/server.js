@@ -1,6 +1,7 @@
 const epxress = require("express");
 const cors = require("cors");
 const { dbconnection } = require("../database/config");
+const fileUpload = require("express-fileupload");
 class Server {
   array = [];
 
@@ -23,6 +24,13 @@ class Server {
   }
 
   middlewares() {
+    //Cargar archivos
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+      })
+    );
     this.app.use(cors());
     // this.app.use(morgan())
 
@@ -38,8 +46,9 @@ class Server {
     this.app.use("/api/products", require("../routes/product.routes"));
     this.app.use("/api/Orders", require("../routes/order.routes"));
     this.app.use("/api/sales", require("../routes/sale.routes"));
+    this.app.use("/api/upload", require("../routes/uploadfile.routes"));
   }
-  
+
   listen() {
     this.app.listen(this.port, (err) => {
       if (err) {

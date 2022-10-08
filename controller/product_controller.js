@@ -1,18 +1,24 @@
 const { request, response } = require("express");
 const { Promise } = require("mongoose");
+
+const cloudinary = require("cloudinary").v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
 const { Product } = require(`../models`);
 const createProduct = async (req = request, res = response) => {
   const name = req.body.name.toUpperCase();
+  const { file } = req.files;
   const { status, ...product } = req.body;
-
+  console.log(name);
   const existProduct = await Product.findOne({ name });
-
   if (existProduct) {
     return res.status(400).json({
       status: false,
       msg: `El producto ${name} ya existe`,
     });
   }
+const { tempFilePath } = req.files.file;
+  const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+  const image =  secure_url;
 
   const data = {
     name,
@@ -21,6 +27,7 @@ const createProduct = async (req = request, res = response) => {
     category: product.category,
     description: product.description,
     stock: product.stock,
+    image
   };
 
   const postProduct = new Product(data);
@@ -71,11 +78,25 @@ const getProductsById = async (req = request, res = response) => {
 
 const updateProduct = async (req = request, res = response) => {
   const { id } = req.params;
+  const { file } = req.files;
+
   const { status, category, user, ...produ } = req.body;
   produ.user = req.userAuth._id;
 
+  const productImage = await Product.findById(id);
   const product = await Product.findByIdAndUpdate(id, produ, { new: true });
-  product.save();
+  //* si hay en la base de datos existe una imagen se elimina
+  if (productImage.image) {
+    const imageCloudinary = productImage.image.split("/");
+    const nameImage = imageCloudinary[imageCloudinary.length - 1];
+    const [id] = nameImage.split(".");
+    await cloudinary.uploader.destroy(id);
+  }
+  //* se obtiene la imagen de los req.files
+  const { tempFilePath } = req.files.file;
+  const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+  productImage.image = secure_url;
+  productImage.save();
 
   res.status(200).json({
     status: true,
@@ -92,6 +113,7 @@ const deleteProduct = async (req = request, res = response) => {
     { status: false },
     { new: true }
   );
+
   res.status(201).json({
     status: true,
     msg: `Producto con el id ${id} se a eliminado`,
@@ -111,7 +133,6 @@ const deleteQuantityProduct = async (req = request, res = response) => {
         msg: "No hay la cantidad disponible",
       });
     }
-
     const newStock = quantityProducts.stock - dataProduct[i].quantity;
 
     successOrder = await Product.findByIdAndUpdate(
@@ -127,8 +148,6 @@ const deleteQuantityProduct = async (req = request, res = response) => {
     status: true,
     msg: "Venta realizada",
   });
-
- 
 };
 
 module.exports = {

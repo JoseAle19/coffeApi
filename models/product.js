@@ -38,6 +38,9 @@ const productSchema = Schema({
     default: 1, 
     required: [true, "Ingresa la cantidad de productos"]
   },
+  image: {
+    type: String
+  }
 });
 
 productSchema.methods.toJSON = function () {

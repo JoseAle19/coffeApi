@@ -1,7 +1,7 @@
 const { Router } = require("express");
 
 const { check } = require("express-validator");
-const { saleOrder } = require("../controller/salecontreler");
+const { saleOrder } = require("../controller/salecontroller");
 
 const { validateJWT } = require("../middleware/validateJWT");
 const { validationfields } = require("../middleware/user.middleware");
