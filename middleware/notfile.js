@@ -1,14 +1,13 @@
 const { request, response } = require("express");
 
 const isFile = (req = request, res = response, next) => {
-    const files = req.files
-  if ( !files||  Object.keys(files).length < 1 || !files.file) {
-    return res.status(400).json({
-      status: false,    
-      msg: "No hay imagen",
-    });
+  const files = req.files;
+  if (!files) {
+    req.files = {
+      file: "https://upload.wikimedia.org/wikipedia/commons/6/66/Sin_datos.jpg",
+    };
   }
-  next();
+  next()
 };
 
 module.exports = {

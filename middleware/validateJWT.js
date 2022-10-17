@@ -34,8 +34,8 @@ if(!user.estado){
 req.userAuth = user
         next() 
     } catch (error) {
-        return res.status(400).json({
-            msg: "Token no valido"
+        return res.status(500).json({
+            msg: "Token no valido, code error 500"
         })
     }
 

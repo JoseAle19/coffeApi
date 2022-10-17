@@ -4,6 +4,8 @@ const { Promise } = require("mongoose");
 const cloudinary = require("cloudinary").v2;
 cloudinary.config(process.env.CLOUDINARY_URL);
 const { Product } = require(`../models`);
+
+
 const createProduct = async (req = request, res = response) => {
   const name = req.body.name.toUpperCase();
   const { file } = req.files;
@@ -16,9 +18,36 @@ const createProduct = async (req = request, res = response) => {
       msg: `El producto ${name} ya existe`,
     });
   }
-const { tempFilePath } = req.files.file;
+console.log(file);
+  if (!file.tempFilePath) {
+    const image = file;
+
+    const data = {
+      name,
+      user: req.userAuth._id,
+      price: product.price,
+      category: product.category,
+      description: product.description,
+      stock: product.stock,
+      image,
+    };
+
+    const postProduct = new Product(data);
+
+    // postProduct.save();
+  
+    return res.status(201).json({
+      status: false,
+      msg: "Producto creado",
+      postProduct,
+    });
+  }
+
+
+
+  const { tempFilePath } = req.files.file;
   const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
-  const image =  secure_url;
+  const image = secure_url;
 
   const data = {
     name,
@@ -27,12 +56,12 @@ const { tempFilePath } = req.files.file;
     category: product.category,
     description: product.description,
     stock: product.stock,
-    image
+    image,
   };
 
   const postProduct = new Product(data);
 
-  postProduct.save();
+  // postProduct.save();
 
   res.status(201).json({
     status: false,

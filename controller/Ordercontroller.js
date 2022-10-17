@@ -27,7 +27,7 @@ const OrderProduct = async (req = request, res = response) => {
 if (foundProduct.stock < dataProducts[i].quantity) {
   return res.status(400).json({
     status: false,
-    msg: "No hay en existencia"
+    msg: "Orderen existencia"
   })
 }
 

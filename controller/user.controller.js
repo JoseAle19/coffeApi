@@ -28,6 +28,30 @@ const userpost = async (req = request, res = response) => {
   //* Subir imagen a cloudinary
   const { file } = req.files;
 
+  if (!file.tempFilePath) {
+    const image = file;
+
+    const user = new User({
+      name,
+      email,
+      password,
+      rol,
+      google,
+      image,
+    });
+
+    const salt = bcrypt.genSaltSync();
+    //Este metod genSaltSync tiene por defecto 10 saltos
+    user.password = bcrypt.hashSync(password, salt);
+
+    await user.save();
+    return res.status(201).json({
+      status: true,
+      msg: "Usuario creado",
+      user,
+    });
+  }
+
   const { tempFilePath } = file;
   const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
 
