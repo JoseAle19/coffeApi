@@ -12,7 +12,7 @@ const getOrders = async (req = request, res = response) => {
   res.status(200).json({
     status: true,
     orders: countDocuments,
-    msg: "Peedidos  realizadas",
+    msg: "Pedidos  realizadas",
     listOrders: getOrders,
   });
 };
@@ -24,13 +24,12 @@ const OrderProduct = async (req = request, res = response) => {
   for (let i = 0; i < dataProducts.length; i++) {
     const foundProduct = await Product.findById(dataProducts[i].productId);
 
-if (foundProduct.stock < dataProducts[i].quantity) {
-  return res.status(400).json({
-    status: false,
-    msg: "Orderen existencia"
-  })
-}
-
+    if (foundProduct.stock < dataProducts[i].quantity) {
+      return res.status(400).json({
+        status: false,
+        msg: "No hay los productos en existencia",
+      });
+    }
 
     const total = foundProduct.price * dataProducts[i].quantity;
     totalToPay += total;
@@ -40,11 +39,13 @@ if (foundProduct.stock < dataProducts[i].quantity) {
     totalToPay,
     client: req.userAuth.id,
   };
+
+
   const productOrder = new Order(data);
   await productOrder.save();
   const { email, name } = await User.findById(req.userAuth.id);
 
-  // sendEmailOrder(email, name, productOrder.id);
+  sendEmailOrder(email, name, productOrder.id);
 
   res.status(200).json({
     status: true,
