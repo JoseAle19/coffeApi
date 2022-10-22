@@ -7,12 +7,12 @@ const getOrders = async (req = request, res = response) => {
   };
 
   const countDocuments = await Order.countDocuments(query);
-  const getOrders = await Order.find(query).populate("client", "name");
+  const getOrders = await Order.find(query).populate("client");
 
   res.status(200).json({
     status: true,
     orders: countDocuments,
-    msg: "Pedidos  realizadas",
+    msg: "Todos los pedidos",
     listOrders: getOrders,
   });
 };
@@ -31,6 +31,14 @@ const OrderProduct = async (req = request, res = response) => {
       });
     }
 
+    const newStock = foundProduct.stock - dataProducts[i].quantity;
+    const updateStockProduct = await Product.findByIdAndUpdate(
+      dataProducts[i].productId,
+      { stock: newStock, finish: false },
+      { new: true }
+    );
+
+
     const total = foundProduct.price * dataProducts[i].quantity;
     totalToPay += total;
   }
@@ -40,7 +48,6 @@ const OrderProduct = async (req = request, res = response) => {
     client: req.userAuth.id,
   };
 
-
   const productOrder = new Order(data);
   await productOrder.save();
   const { email, name } = await User.findById(req.userAuth.id);
@@ -49,7 +56,7 @@ const OrderProduct = async (req = request, res = response) => {
 
   res.status(200).json({
     status: true,
-    msg: "Datos de la venta realizada",
+    msg: "Datos del pedido",
     productOrder,
   });
 };

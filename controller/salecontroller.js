@@ -8,7 +8,6 @@ const saleOrder = async (req = request, res = response) => {
   for (let i = 0; i < saleorder.products.length; i++) {
     const saleproduct = await Product.findById(saleorder.products[i].productId)
 const newstok = saleproduct.stock - saleorder.products[i].quantity
-console.log(newstok);
 
 
 await Product.findByIdAndUpdate(saleorder.products[i].productId, {stock: newstok})
