@@ -1,7 +1,7 @@
 const { Router } = require("express");
 
 const { check } = require("express-validator");
-const { saleOrder } = require("../controller/salecontroller");
+const {  finishOrder } = require("../controller/salecontroller");
 
 const { validateJWT } = require("../middleware/validateJWT");
 const { validationfields } = require("../middleware/user.middleware");
@@ -19,7 +19,7 @@ router.post("/postsale/:orderid",
       check("orderid").custom(orderIdfinish),
     validationfields
   ],
-  saleOrder
+  finishOrder
 );
 
 module.exports = router;

@@ -4,7 +4,7 @@ const saleSchema = Schema({
   employe: {
     type: Schema.Types.ObjectId,
     ref: "Usuario",
-    require: [true, "Para realizar ser un usuario"]
+    require: [true, "Se necesita ser un usuario de la aplicacion"]
   },
 
   order: {

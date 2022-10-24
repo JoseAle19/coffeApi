@@ -8,15 +8,15 @@ const getOrders = async (req = request, res = response) => {
 
   const countDocuments = await Order.countDocuments(query);
   const getOrders = await Order.find(query).populate("client");
-
   res.status(200).json({
     status: true,
-    orders: countDocuments,
     msg: "Todos los pedidos",
+    orders: countDocuments,
     listOrders: getOrders,
+    // quantityProducts: products.length
   });
 };
-const OrderProduct = async (req = request, res = response) => {
+const orderProduct = async (req = request, res = response) => {
   const { dataProducts } = req.body;
 
   let totalToPay = 0;
@@ -37,7 +37,6 @@ const OrderProduct = async (req = request, res = response) => {
       { stock: newStock, finish: false },
       { new: true }
     );
-
 
     const total = foundProduct.price * dataProducts[i].quantity;
     totalToPay += total;
@@ -60,7 +59,34 @@ const OrderProduct = async (req = request, res = response) => {
     productOrder,
   });
 };
+
+const deleteOrder = async (req = request, res = response) => {
+  const { orderid } = req.params;
+
+  const order = await Order.findById(orderid);
+
+  const { products } = order;
+  let productNewStock;
+  for (let i = 0; i < products.length; i++) {
+    const product = await Product.findById(products[i].productId);
+    const updateStock = product.stock + products[i].quantity;
+
+    productNewStock = await Product.findByIdAndUpdate(
+      products[i].productId,
+      { stock: updateStock },
+      { new: true }
+    );
+  }
+  await Order.findByIdAndDelete(orderid);
+
+  return res.status(200).json({
+    status: true,
+    newStock: productNewStock,
+  });
+};
+
 module.exports = {
-  OrderProduct,
+  orderProduct,
   getOrders,
+  deleteOrder,
 };

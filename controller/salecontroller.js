@@ -1,39 +1,35 @@
 const { request, response } = require("express");
 const { Sale, Order, Product } = require("../models");
+const order = require("../models/order");
+const sale = require("../models/sale");
 
-const saleOrder = async (req = request, res = response) => {
+const finishOrder = async (req = request, res = response) => {
+  const { orderid } = req.params;
+  const { finish } = await Order.findByIdAndUpdate(
+    orderid,
+    { finish: true },
+    { new: true }
+  );
+  const { id } = req.userAuth;
+  console.log(`Token de usuario ${id}`);
 
-  const saleorder = await Order.findById(req.params.orderid);
-
-  for (let i = 0; i < saleorder.products.length; i++) {
-    const saleproduct = await Product.findById(saleorder.products[i].productId)
-const newstok = saleproduct.stock - saleorder.products[i].quantity
-
-
-await Product.findByIdAndUpdate(saleorder.products[i].productId, {stock: newstok})
-  }
-
-  await Order.findByIdAndUpdate(req.params.orderid, {finish: true})
-  const data = {
-    employe: req.userAuth,
-    order: req.params.orderid,
+  const dataSale = {
+    employe: id,
+    order: orderid,
   };
+  const sale = new Sale(dataSale);
 
-  const orderSale = new Sale(data);
+  sale.save();
 
-
-
-  await orderSale.save();  
-
-
-  res.status(200).json({
-    msg: "Datos del pedido",
-    order: orderSale,
-
+  return res.status(200).json({
+    status: true,
+    message: "Pedido finalizado",
+    statusOrder: finish,
+    sale: sale,
   });
 };
-
+ 
 
 module.exports = {
-  saleOrder,
+  finishOrder,
 };
