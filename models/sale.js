@@ -11,6 +11,13 @@ const saleSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: "Order"
   },
+
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+   
+  total: Number
 });
 
 module.exports = model("Sale", saleSchema);

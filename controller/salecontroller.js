@@ -5,17 +5,16 @@ const sale = require("../models/sale");
 
 const finishOrder = async (req = request, res = response) => {
   const { orderid } = req.params;
-  const { finish } = await Order.findByIdAndUpdate(
+  const { finish, totalToPay } = await Order.findByIdAndUpdate(
     orderid,
     { finish: true },
     { new: true }
   );
   const { id } = req.userAuth;
-  console.log(`Token de usuario ${id}`);
-
   const dataSale = {
     employe: id,
     order: orderid,
+    total:totalToPay
   };
   const sale = new Sale(dataSale);
 
@@ -25,7 +24,7 @@ const finishOrder = async (req = request, res = response) => {
     status: true,
     message: "Pedido finalizado",
     statusOrder: finish,
-    sale: sale,
+    // sale: sale,
   });
 };
  
