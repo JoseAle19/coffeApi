@@ -54,7 +54,7 @@ class Server {
       if (err) {
         console.log(err);
       }
-      console.log("Running in the " + this.port);
+      console.log("Running in the port " + this.port);
     });
   }
 }
