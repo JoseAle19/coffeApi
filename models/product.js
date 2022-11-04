@@ -6,9 +6,8 @@ const productSchema = Schema({
     required: [true, "El nombre del producto es obligatorio"],
   },
   status: {
-    type: String,
-    default: true,
-    required: true,
+    type: Boolean,
+    default: true
   },
   user: {
     type: Schema.Types.ObjectId,

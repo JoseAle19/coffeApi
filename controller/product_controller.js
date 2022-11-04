@@ -18,7 +18,6 @@ const createProduct = async (req = request, res = response) => {
       msg: `El producto ${name} ya existe`,
     });
   }
-console.log(file);
   if (!file.tempFilePath) {
     const image = file;
 
@@ -34,7 +33,7 @@ console.log(file);
 
     const postProduct = new Product(data);
 
-    // postProduct.save();
+    postProduct.save();
   
     return res.status(201).json({
       status: false,
@@ -77,6 +76,7 @@ const getProducts = async (req = request, res = response) => {
     Product.find(query).countDocuments(),
     Product.find(query).populate("category", "name").populate("user", "name"),
   ]);
+console.log(products)
 
   if (countDocs <= 0) {
     return res.status(400).json({
