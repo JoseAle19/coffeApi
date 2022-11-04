@@ -60,7 +60,7 @@ const createProduct = async (req = request, res = response) => {
 
   const postProduct = new Product(data);
 
-  // postProduct.save();
+  postProduct.save();
 
   res.status(201).json({
     status: false,
