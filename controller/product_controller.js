@@ -36,7 +36,7 @@ const createProduct = async (req = request, res = response) => {
     postProduct.save();
   
     return res.status(201).json({
-      status: false,
+      status: true,
       msg: "Producto creado",
       postProduct,
     });
@@ -63,8 +63,8 @@ const createProduct = async (req = request, res = response) => {
   postProduct.save();
 
   res.status(201).json({
-    status: false,
-    msg: "Producto craeado",
+    status: true,
+    msg: "Producto creado",
     postProduct,
   });
 };
