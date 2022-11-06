@@ -1,16 +1,15 @@
 const { request, response } = require("express");
 const { Promise } = require("mongoose");
-
 const cloudinary = require("cloudinary").v2;
 cloudinary.config(process.env.CLOUDINARY_URL);
-const { Product } = require(`../models`);
+const { Product, Order } = require(`../models`);
+const order = require("../models/order");
 
 
 const createProduct = async (req = request, res = response) => {
   const name = req.body.name.toUpperCase();
   const { file } = req.files;
   const { status, ...product } = req.body;
-  console.log(name);
   const existProduct = await Product.findOne({ name });
   if (existProduct) {
     return res.status(400).json({
@@ -76,7 +75,6 @@ const getProducts = async (req = request, res = response) => {
     Product.find(query).countDocuments(),
     Product.find(query).populate("category", "name").populate("user", "name"),
   ]);
-console.log(products)
 
   if (countDocs <= 0) {
     return res.status(400).json({
@@ -136,7 +134,22 @@ const updateProduct = async (req = request, res = response) => {
 
 const deleteProduct = async (req = request, res = response) => {
   const { id } = req.params;
+  const searchProductByOrder = await Order.find({finish: false})
+  for (let i = 0; i < searchProductByOrder.length; i++) {
+    const produtsInOrder = searchProductByOrder[i].products
+    for (let i = 0; i < produtsInOrder.length; i++) {
+      const element = produtsInOrder[i].productId;
 
+     if (id === element+'') {
+      return res.status(400).json({
+        status: false,
+        msg: `Producto con el id ${id} no se puede eliminar`,
+        error:'Existe un pedido con este producto'
+      });
+     }
+    }
+
+  }
   const productDelete = await Product.findByIdAndUpdate(
     id,
     { status: false },
@@ -146,7 +159,7 @@ const deleteProduct = async (req = request, res = response) => {
   res.status(201).json({
     status: true,
     msg: `Producto con el id ${id} se a eliminado`,
-    productDelete,
+    productDelete
   });
 };
 
