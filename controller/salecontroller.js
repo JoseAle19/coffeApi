@@ -1,5 +1,5 @@
 const { request, response } = require("express");
-const { Sale, Order, Product } = require("../models");
+const { Sale, Order } = require("../models");
 const order = require("../models/order");
 const sale = require("../models/sale");
 

@@ -10,7 +10,7 @@ const createProduct = async (req = request, res = response) => {
   const name = req.body.name.toUpperCase();
   const { file } = req.files;
   const { status, ...product } = req.body;
-  const existProduct = await Product.findOne({ name });
+  const existProduct = await Product.findOne({ name});
   if (existProduct) {
     return res.status(400).json({
       status: false,
@@ -150,11 +150,7 @@ const deleteProduct = async (req = request, res = response) => {
     }
 
   }
-  const productDelete = await Product.findByIdAndUpdate(
-    id,
-    { status: false },
-    { new: true }
-  );
+  const productDelete = await Product.findByIdAndDelete(id)
 
   res.status(201).json({
     status: true,

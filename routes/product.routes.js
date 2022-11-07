@@ -15,7 +15,7 @@ const {
   deleteProduct,
   deleteQuantityProduct,
 } = require("../controller/product_controller");
-const { isFile } = require("../middleware");
+const { isFile, validateROL } = require("../middleware");
 
 router.get("/getProducts", getProducts);
 
@@ -34,6 +34,7 @@ router.post(
   [
     isFile,
     validateJWT,
+    validateROL,
     check("name", "El nombre del producto es requerido").not().isEmpty(),
     check("price", "El precio no puede quedar vacio").not().isEmpty(),
     check("category", "Elige una categoria para el producto").not().isEmpty(),
@@ -51,6 +52,7 @@ router.put(
   [
     isFile, //* valida si viene el archivo(la imagen del producto)
     validateJWT,
+    validateROL,
     check(`id`, `El id no es valido`).isMongoId(),
     check(`id`).custom(existProduct),
     validationfields,
@@ -63,6 +65,7 @@ router.delete(
   "/deleteProduct/:id",
   [
     validateJWT,
+    validateROL,
     check("id", "El id del producto no es valido").isMongoId(),
     check("id").custom(existProduct),
     validationfields,

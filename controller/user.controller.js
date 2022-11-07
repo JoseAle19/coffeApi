@@ -8,7 +8,7 @@ cloudinary.config(process.env.CLOUDINARY_URL);
 
 const userget = async (req = request, res = response) => {
   const query = { estado: true };
-  const { limit = 5, desde = 0 } = req.query;
+  const { limit = 20, desde = 0 } = req.query;
 
   const [total, users] = await Promise.all([
     User.countDocuments(query),
