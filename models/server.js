@@ -47,6 +47,7 @@ class Server {
     this.app.use("/api/Orders", require("../routes/order.routes"));
     this.app.use("/api/sales", require("../routes/sale.routes"));
     this.app.use("/api/upload", require("../routes/uploadfile.routes"));
+    this.app.use("/api/read", require("../routes/readToken.routes"));
   }
 
   listen() {
