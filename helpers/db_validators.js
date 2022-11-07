@@ -1,6 +1,9 @@
 const { Category, User, Product, Rol, Order } = require("../models");
 const jwt = require("jsonwebtoken");
 
+
+
+
 const validatorRol = async (role = "") => {
   const existRol = await Rol.findOne({ role });
   if (!existRol) {
@@ -38,6 +41,15 @@ const existProduct = async (id) => {
     throw new Error(`El producto con el id: ${id} no existe `);
   }
 };
+
+const existProductInBd = async (name)=>{
+const existProductBd = await Product.findOne({name: name.toUpperCase()});
+  if (existProductBd) {
+    throw new Error(`El producto ${name} ya existe`);
+  }
+}
+
+
 const existOrder = async (id) => {
   const existOrder = await Order.findById(id);
   if (!existOrder) {
@@ -71,4 +83,5 @@ module.exports = {
   existOrder,
   orderIdfinish,
   validateCollections,
+  existProductInBd
 };

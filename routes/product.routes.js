@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { validateJWT } = require("../middleware/validateJWT");
 
 const { validationfields } = require("../middleware/user.middleware");
-const { categoryExistById, existProduct } = require("../helpers/db_validators");
+const { categoryExistById, existProduct, existProductInBd } = require("../helpers/db_validators");
 
 const { uploadFile } = require("../helpers");
 const { check } = require("express-validator");
@@ -43,6 +43,7 @@ router.post(
     }),
     check("category", "Este no es un id  valido").isMongoId(),
     check("description", "Breve descripcion del producto").not().isEmpty(),
+    check('name').custom(existProductInBd),
     validationfields,
   ],
   createProduct

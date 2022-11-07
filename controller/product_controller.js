@@ -10,13 +10,7 @@ const createProduct = async (req = request, res = response) => {
   const name = req.body.name.toUpperCase();
   const { file } = req.files;
   const { status, ...product } = req.body;
-  const existProduct = await Product.findOne({ name});
-  if (existProduct) {
-    return res.status(400).json({
-      status: false,
-      msg: `El producto ${name} ya existe`,
-    });
-  }
+  
   if (!file.tempFilePath) {
     const image = file;
 
