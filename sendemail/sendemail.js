@@ -4,6 +4,7 @@ require("dotenv").config();
 const nodemailer = require("nodemailer");
 
 const sendEmailOrder = async (userEmail, userName, orderId) => {
+  
   let testAccount = await nodemailer.createTestAccount();
 
   let transporter = nodemailer.createTransport({

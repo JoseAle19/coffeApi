@@ -1,6 +1,7 @@
 const { request, response } = require("express");
 const { Order, Product, User } = require("../models");
 const { sendEmailOrder } = require("../sendemail/sendemail");
+const { sendMessageNumber } = require("../sendemail/sendmessage");
 const getOrders = async (req = request, res = response) => {
   const query = {
     finish: false,
@@ -32,7 +33,7 @@ const orderProduct = async (req = request, res = response) => {
     }
 
     const newStock = foundProduct.stock - dataProducts[i].quantity;
-    const updateStockProduct = await Product.findByIdAndUpdate(
+     await Product.findByIdAndUpdate(
       dataProducts[i].productId,
       { stock: newStock, finish: false },
       { new: true }
@@ -50,7 +51,7 @@ const orderProduct = async (req = request, res = response) => {
   const productOrder = new Order(data);
   await productOrder.save();
   const { email, name } = await User.findById(req.userAuth.id);
-
+  sendMessageNumber(name, productOrder.id)
   sendEmailOrder(email, name, productOrder.id);
 
   res.status(200).json({
