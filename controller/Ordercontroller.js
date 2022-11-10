@@ -51,8 +51,8 @@ const orderProduct = async (req = request, res = response) => {
   const productOrder = new Order(data);
   await productOrder.save();
   const { email, name } = await User.findById(req.userAuth.id);
-  sendMessageNumber(name, productOrder.id)
-  sendEmailOrder(email, name, productOrder.id);
+  // sendMessageNumber(name, productOrder.id)
+  // sendEmailOrder(email, name, productOrder.id);
 
   res.status(200).json({
     status: true,

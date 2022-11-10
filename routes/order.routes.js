@@ -14,6 +14,7 @@ router.post(
   "/successOrder",
   [
     validateJWT,
+    validateROL,
     check("dataProducts", "No a especificado ni un producto").isLength({
       min: 1,
     }),
